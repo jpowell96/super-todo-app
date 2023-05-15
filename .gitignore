@@ -3,3 +3,6 @@
 *.iws
 *.iml
 *.ipr
+
+### Local Generatred Observability Data
+/tempo-data/
