@@ -4,6 +4,7 @@ import com.example.demo.model.TodoItem;
 import com.example.demo.model.builder.TodoItemBuilder;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,6 +15,11 @@ public class InMemoryTodoRepository implements TodoRepository {
     private Long idCounter = 1L;
     Map<Long, TodoItem> idToItem;
     Map<String, TodoItem> externalIdToItem;
+
+    public InMemoryTodoRepository() {
+        this.externalIdToItem = new HashMap<>();
+        this.idToItem = new HashMap<>();
+    }
 
     @Override
     public Optional<TodoItem> getTodoById(Long id) {

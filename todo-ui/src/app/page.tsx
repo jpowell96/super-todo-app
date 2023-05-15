@@ -4,13 +4,34 @@ import { ChangeEvent, useState } from 'react';
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([]);
-  const [input, setInput] = useState("");
+  const [title, setTitle] = useState("")
+  const [notes, setNotes] = useState("");
 
-  const addTodo = (e) => {
+  async function saveTodo(createTodoRequest: {title: string , notes: string}) {
+    // TODO: Pull the api url from process.env file
+    const res = await fetch(`http://localhost:8080/todos/create`, {
+      headers: new Headers({'content-type': 'application/json'}),
+      method: "POST",
+      body: JSON.stringify(createTodoRequest),
+      referrer: "",
+      referrerPolicy: "origin",
+      
+    
+    });
+    console.log(res);
+    return res.json();
+  }
+
+  const addTodo = async (e) => {
     e.preventDefault();
-    if (!input) return;
-    setTodos([...todos, { id: Date.now(), text: input, done: false }]);
-    setInput("");
+    if (!title && !notes) return;
+    // 1. Write Note to LocalStorage?
+
+    // 2. Call the api
+    const note = await saveTodo({title: title, notes: notes});
+    console.log(note);
+    setTodos([...todos, { id: Date.now(), text: notes, done: false, title: title }]);
+    setNotes("");
   };
 
   const deleteTodo = (id) => {
@@ -27,10 +48,17 @@ const TodoApp = () => {
     <div className="container">
       <h1>Todo App</h1>
       <form onSubmit={addTodo}>
+        <p>Title</p>
+        <input  
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Todo Title"/>
+        <p>Notes</p>
         <input
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
           placeholder="Add a new todo"
         />
         <button type="submit">Add Todo</button>
@@ -38,10 +66,12 @@ const TodoApp = () => {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id} className={`todo-item ${todo.done ? "done" : ""}`}>
-            <span onClick={() => markTodo(todo.id)}>{todo.text}</span>
-            <button className="delete" onClick={() => deleteTodo(todo.id)}>
-              Delete
-            </button>
+            {/* TODO: Replace with a Card Component */}
+            <h4>{todo.title}</h4>
+            {/* TODO: This to be edited and have a separate button to mark as done */}
+            <span>{todo.text}</span>
+            <button className="complete"onClick={() => markTodo(todo.id)}>Complete</button>
+            <button className="delete" onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
         ))}
       </ul>
