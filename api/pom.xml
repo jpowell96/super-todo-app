@@ -10,11 +10,14 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>todo-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>todo-list</name>
 	<description>Testing deploys to AWS</description>
 	<properties>
 		<java.version>17</java.version>
+		<maven.compiler.release>17</maven.compiler.release>
+		<otel.traces.api.version>0.13.1</otel.traces.api.version>
+		<otel.metrics.api.version>1.10.0-alpha-rc.1</otel.metrics.api.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -32,6 +35,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+			<version>1.20.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.instrumentation</groupId>
+			<artifactId>opentelemetry-instrumentation-annotations</artifactId>
+			<version>1.20.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api-trace</artifactId>
+			<version>${otel.traces.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api-metrics</artifactId>
+			<version>${otel.metrics.api.version}</version>
 		</dependency>
 
 	</dependencies>
