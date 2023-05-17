@@ -5,14 +5,14 @@ receivers:
         endpoint: 0.0.0.0:5555
 
 processors:
+  # Batches data and sends every one second or when batch_size of 1024 is met
   batch:
     timeout: 1s
     send_batch_size: 1024
 
 exporters:
-  prometheus:
-    endpoint: collector:6666
-    namespace: default
+  logging:
+    loglevel: debug
   otlp:
     endpoint: tempo:4317
     tls:
@@ -23,11 +23,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [logging]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
-  telemetry:
-    logs:
-      level: debug
+      exporters: [logging, otlp]

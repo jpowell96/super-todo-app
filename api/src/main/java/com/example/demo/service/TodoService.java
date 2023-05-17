@@ -6,6 +6,7 @@ import com.example.demo.model.builder.TodoItemBuilder;
 import com.example.demo.repository.TodoRepository;
 import com.example.demo.request.CreateTodoRequest;
 import com.example.demo.request.UpdateTodoRequest;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class TodoService {
         return List.of(new TodoItem(5L, "abc-def", "My Todo", "This is the message."));
     }
 
+    @WithSpan
     public TodoItem createTodoItem(CreateTodoRequest request) {
         String uuid = UUID.randomUUID().toString();
         TodoItem toCreate = new TodoItem(null, uuid, request.getTitle(), request.getNotes());
@@ -32,6 +34,7 @@ public class TodoService {
         return getTodo(uuid);
     }
 
+    @WithSpan
     public TodoItem getTodo(String externalId) {
         return todoRepository
                 .getTodoByExternalId(externalId)
